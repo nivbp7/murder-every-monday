@@ -1,0 +1,6 @@
+# .github/workflows/build-themes.yml
+- uses: actions/setup-node@v4
+  with:
+    node-version: 20
+- run: npm ci        # now installs cheerio
+- run: npm run build:themes

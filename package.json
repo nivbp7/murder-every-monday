@@ -1,0 +1,14 @@
+{
+  "name": "murder-every-monday",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:themes": "node scripts/build-themes.js",
+    "send:push": "node scripts/send-push.js",
+    "serve": "npx http-server ./public -p 8080 -c-1"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

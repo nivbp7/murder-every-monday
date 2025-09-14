@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>#MurderEveryMonday — Themes</title>
+  <meta name="description" content="See the current and next #MurderEveryMonday theme, pick a date, and subscribe for Monday reminders."/>
+  <link rel="stylesheet" href="./style.css"/>
+  <!-- OneSignal SDK -->
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+  <script>
+    // Replace with your OneSignal App ID (set it as a repo secret too)
+    window.ONESIGNAL_APP_ID = "YOUR_ONESIGNAL_APP_ID";
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(function(OneSignal) {
+      OneSignal.init({
+        appId: window.ONESIGNAL_APP_ID,
+        // Ensure the service worker files exist at / (root of the site)
+        serviceWorkerParam: { scope: "/" },
+        serviceWorkerPath: "/OneSignalSDKWorker.js",
+        serviceWorkerUpdaterPath: "/OneSignalSDKUpdaterWorker.js",
+        notifyButton: { enable: false }
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>#MurderEveryMonday</h1>
+    <p class="sub">Themes from
+      <a href="https://crossexaminingcrime.wordpress.com/murdereverymonday-theme-list/"
+         target="_blank" rel="noopener">Cross-Examining Crime</a>
+    </p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Current &amp; Next (based on your timezone)</h2>
+      <div id="zoneRow"></div>
+      <div id="currentBlock" class="theme-block"></div>
+      <div id="nextBlock" class="theme-block"></div>
+    </section>
+
+    <section class="card">
+      <h2>Find theme by date</h2>
+      <p>Select any date (only Mondays have themes):</p>
+      <input id="datePicker" type="date"/>
+      <div id="dateResult" class="theme-block"></div>
+    </section>
+
+    <section class="card">
+      <h2>Notifications</h2>
+      <p>Get a push notification every Monday morning with the new theme.</p>
+      <div class="actions">
+        <button id="btnSubscribe">Subscribe to push</button>
+        <button id="btnUnsubscribe" class="secondary">Unsubscribe</button>
+      </div>
+      <p id="notifStatus" class="status"></p>
+    </section>
+  </main>
+
+  <footer>
+    <small>Made for vintage mystery fans.</small>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+  <script>
+    // Subscribe/Unsubscribe through OneSignal from the page UI
+    function setStatus(msg){ document.getElementById('notifStatus').textContent = msg; }
+
+    document.getElementById('btnSubscribe').addEventListener('click', () => {
+      window.OneSignalDeferred.push(async (OneSignal) => {
+        try {
+          await OneSignal.Slidedown.promptPush();
+          const perm = await OneSignal.Notifications.getPermission();
+          setStatus(perm === 'granted' ? 'Subscribed!' : 'Permission not granted.');
+        } catch (e) {
+          setStatus('Subscription failed.');
+        }
+      });
+    });
+
+    document.getElementById('btnUnsubscribe').addEventListener('click', () => {
+      window.OneSignalDeferred.push(async (OneSignal) => {
+        try {
+          await OneSignal.Notifications.unsubscribe();
+          setStatus('Unsubscribed.');
+        } catch (e) {
+          setStatus('Unsubscribe failed.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
