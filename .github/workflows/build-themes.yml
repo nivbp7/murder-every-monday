@@ -1,6 +1,36 @@
-# .github/workflows/build-themes.yml
-- uses: actions/setup-node@v4
-  with:
-    node-version: 20
-- run: npm ci        # now installs cheerio
-- run: npm run build:themes
+name: Build themes.json
+
+on:
+  workflow_dispatch:          # allow manual “Run workflow”
+  schedule:
+    - cron: "0 3 * * *"       # daily at 03:00 UTC (GitHub cron is UTC)
+
+permissions:
+  contents: write             # needed to commit themes.json back
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build themes.json
+        env:
+          THEMES_SOURCE_URL: https://crossexaminingcrime.wordpress.com/murdereverymonday-theme-list/
+        run: npm run build:themes
+
+      - name: Commit updated themes.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update themes.json"
+          file_pattern: public/themes.json
