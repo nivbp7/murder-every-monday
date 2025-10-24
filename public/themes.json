@@ -572,10 +572,6 @@
     "theme": "Cover with a bus."
   },
   {
-    "date": "2025-11-08",
-    "theme": "Crime fiction whose title indicates potential risk e.g. uses words such as danger, warning, beware etc."
-  },
-  {
     "date": "2025-11-10",
     "theme": "Crime fiction whose title starts with the phrase “The Man” or “The Woman”"
   },
@@ -590,6 +586,10 @@
   {
     "date": "2025-12-01",
     "theme": "Crime fiction set in Wales."
+  },
+  {
+    "date": "2025-12-08",
+    "theme": "Crime fiction whose title indicates potential risk e.g. uses words such as danger, warning, beware etc."
   },
   {
     "date": "2025-12-15",
